@@ -5,17 +5,25 @@
   "logo": "https://raw.githubusercontent.com/RocketChat/Rocket.Chat.Artwork/master/Logos/2020/png/logo-horizontal-red.png",
   "keywords": ["meteor", "social", "community", "chat"],
   "website": "https://rocket.chat",
-  "env": {
-    "buildpacks": [
-    "https://github.com/chibat/heroku-buildpack-deno",
-    "scalingo/nodejs"
+  "buildpacks": [
+    {
+      "url": "https://github.com/chibat/heroku-buildpack-deno"
+    },
+    {
+      "url": "scalingo/nodejs"
+    }
   ],
-    "METEOR_APP_DIR": "apps/meteor/",
+  "env": {
+    "METEOR_APP_DIR": {
+      "value": "apps/meteor/"
+    },
     "HEROKU_APP_NAME": {
       "description": "Please re-enter your App Name from the top.",
       "required": true
     },
-    "DEPLOY_PLATFORM": "heroku"
+    "DEPLOY_PLATFORM": {
+      "value": "heroku"
+    }
   },
   "addons": [
     "mongodb"
