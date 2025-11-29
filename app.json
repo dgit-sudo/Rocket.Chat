@@ -6,7 +6,10 @@
   "keywords": ["meteor", "social", "community", "chat"],
   "website": "https://rocket.chat",
   "env": {
-    "BUILDPACK_URL": "https://github.com/RocketChat/meteor-buildpack-horse.git",
+    "buildpacks": [
+    "https://github.com/chibat/heroku-buildpack-deno",
+    "scalingo/nodejs"
+  ],
     "METEOR_APP_DIR": "apps/meteor/",
     "HEROKU_APP_NAME": {
       "description": "Please re-enter your App Name from the top.",
