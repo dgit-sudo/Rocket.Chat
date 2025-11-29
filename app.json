@@ -23,6 +23,9 @@
     },
     "DEPLOY_PLATFORM": {
       "value": "heroku"
+    },
+    "SCALINGO_NODEJS_VERSION": {
+      "value": "20.18.0"
     }
   },
   "addons": [
