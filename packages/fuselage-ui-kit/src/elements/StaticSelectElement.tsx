@@ -1,6 +1,5 @@
 import { SelectFiltered } from '@rocket.chat/fuselage';
 import type * as UiKit from '@rocket.chat/ui-kit';
-import type { ReactElement } from 'react';
 import { memo, useCallback, useMemo } from 'react';
 
 import { useStringFromTextObject } from '../hooks/useStringFromTextObject';
@@ -9,7 +8,7 @@ import type { BlockProps } from '../utils/BlockProps';
 
 type StaticSelectElementProps = BlockProps<UiKit.StaticSelectElement>;
 
-const StaticSelectElement = ({ block, context }: StaticSelectElementProps): ReactElement => {
+const StaticSelectElement = ({ block, context }: StaticSelectElementProps) => {
 	const [{ loading, value, error }, action] = useUiKitState(block, context);
 	const fromTextObjectToString = useStringFromTextObject();
 
@@ -20,7 +19,7 @@ const StaticSelectElement = ({ block, context }: StaticSelectElementProps): Reac
 
 	const handleChange = useCallback(
 		(value: string) => {
-			action({ target: { value } });
+			void action({ target: { value } });
 		},
 		[action],
 	);

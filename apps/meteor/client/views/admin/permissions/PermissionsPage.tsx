@@ -1,7 +1,7 @@
 import { Margins, Tabs, Button } from '@rocket.chat/fuselage';
-import { useEffectEvent } from '@rocket.chat/fuselage-hooks';
+import { useStableCallback } from '@rocket.chat/fuselage-hooks';
+import { usePagination, Page, PageHeader, PageContent } from '@rocket.chat/ui-client';
 import { useRoute, usePermission, useSetModal } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,10 +9,8 @@ import CustomRoleUpsellModal from './CustomRoleUpsellModal';
 import PermissionsContextBar from './PermissionsContextBar';
 import PermissionsTable from './PermissionsTable';
 import { usePermissionsAndRoles } from './hooks/usePermissionsAndRoles';
-import { usePagination } from '../../../components/GenericTable/hooks/usePagination';
-import { Page, PageHeader, PageContent } from '../../../components/Page';
 
-const PermissionsPage = ({ isEnterprise }: { isEnterprise: boolean }): ReactElement => {
+const PermissionsPage = ({ isEnterprise }: { isEnterprise: boolean }) => {
 	const { t } = useTranslation();
 	const [filter, setFilter] = useState('');
 	const canViewPermission = usePermission('access-permissions');
@@ -25,21 +23,21 @@ const PermissionsPage = ({ isEnterprise }: { isEnterprise: boolean }): ReactElem
 	const paginationData = usePagination();
 	const { permissions, total, roleList } = usePermissionsAndRoles(type, filter, paginationData.itemsPerPage, paginationData.current);
 
-	const handlePermissionsTab = useEffectEvent(() => {
+	const handlePermissionsTab = useStableCallback(() => {
 		if (type === 'permissions') {
 			return;
 		}
 		setType('permissions');
 	});
 
-	const handleSettingsTab = useEffectEvent(() => {
+	const handleSettingsTab = useStableCallback(() => {
 		if (type === 'settings') {
 			return;
 		}
 		setType('settings');
 	});
 
-	const handleAdd = useEffectEvent(() => {
+	const handleAdd = useStableCallback(() => {
 		if (!isEnterprise) {
 			setModal(<CustomRoleUpsellModal onClose={() => setModal(null)} />);
 			return;
@@ -60,19 +58,13 @@ const PermissionsPage = ({ isEnterprise }: { isEnterprise: boolean }): ReactElem
 				<Margins blockEnd={16}>
 					<Tabs>
 						<Tabs.Item
-							data-qa='PermissionTable-Permissions'
 							selected={type === 'permissions'}
 							onClick={canViewPermission ? handlePermissionsTab : undefined}
 							disabled={!canViewPermission}
 						>
 							{t('Permissions')}
 						</Tabs.Item>
-						<Tabs.Item
-							data-qa='PermissionTable-Settings'
-							selected={type === 'settings'}
-							onClick={handleSettingsTab}
-							disabled={!canViewSettingPermission}
-						>
+						<Tabs.Item selected={type === 'settings'} onClick={handleSettingsTab} disabled={!canViewSettingPermission}>
 							{t('Settings')}
 						</Tabs.Item>
 					</Tabs>

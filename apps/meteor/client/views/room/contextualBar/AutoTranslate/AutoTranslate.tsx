@@ -1,8 +1,5 @@
 import { Callout, FieldGroup, Field, FieldLabel, FieldRow, ToggleSwitch, Select } from '@rocket.chat/fuselage';
 import type { SelectOption } from '@rocket.chat/fuselage';
-import type { ReactElement, ChangeEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-
 import {
 	ContextualbarClose,
 	ContextualbarTitle,
@@ -10,7 +7,10 @@ import {
 	ContextualbarIcon,
 	ContextualbarContent,
 	ContextualbarDialog,
-} from '../../../../components/Contextualbar';
+} from '@rocket.chat/ui-client';
+import type { ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { useRoom } from '../../contexts/RoomContext';
 
 type AutoTranslateProps = {
@@ -22,14 +22,7 @@ type AutoTranslateProps = {
 	handleClose?: () => void;
 };
 
-const AutoTranslate = ({
-	language,
-	languages,
-	handleSwitch,
-	translateEnable,
-	handleChangeLanguage,
-	handleClose,
-}: AutoTranslateProps): ReactElement => {
+const AutoTranslate = ({ language, languages, handleSwitch, translateEnable, handleChangeLanguage, handleClose }: AutoTranslateProps) => {
 	const { t } = useTranslation();
 	const room = useRoom();
 

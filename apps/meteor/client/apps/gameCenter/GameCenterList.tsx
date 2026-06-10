@@ -1,11 +1,4 @@
 import { Avatar, Icon, Table, TableBody, TableCell, TableHead, TableRow } from '@rocket.chat/fuselage';
-import { useSetModal } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
-import { memo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import type { IGame } from './GameCenter';
-import GameCenterInvitePlayersModal from './GameCenterInvitePlayersModal';
 import {
 	ContextualbarHeader,
 	ContextualbarTitle,
@@ -13,7 +6,13 @@ import {
 	ContextualbarContent,
 	ContextualbarDialog,
 	ContextualbarSkeleton,
-} from '../../components/Contextualbar';
+} from '@rocket.chat/ui-client';
+import { useSetModal } from '@rocket.chat/ui-contexts';
+import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import type { IGame } from './GameCenter';
+import GameCenterInvitePlayersModal from './GameCenterInvitePlayersModal';
 
 interface IGameCenterListProps {
 	handleClose: () => void;
@@ -22,7 +21,7 @@ interface IGameCenterListProps {
 	isLoading: boolean;
 }
 
-const GameCenterList = ({ handleClose, handleOpenGame, games, isLoading }: IGameCenterListProps): ReactElement => {
+const GameCenterList = ({ handleClose, handleOpenGame, games, isLoading }: IGameCenterListProps) => {
 	const { t } = useTranslation();
 	const setModal = useSetModal();
 

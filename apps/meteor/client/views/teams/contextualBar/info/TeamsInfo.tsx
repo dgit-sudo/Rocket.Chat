@@ -1,20 +1,14 @@
 import type { IRoom } from '@rocket.chat/core-typings';
 import { Box, Button, Callout, IconButton } from '@rocket.chat/fuselage';
 import { RoomAvatar } from '@rocket.chat/ui-avatar';
-import { GenericMenu } from '@rocket.chat/ui-client';
-import type { ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import { useTeamActions } from './useTeamActions';
 import {
+	GenericMenu,
 	ContextualbarHeader,
 	ContextualbarIcon,
 	ContextualbarTitle,
 	ContextualbarClose,
 	ContextualbarScrollableContent,
 	ContextualbarDialog,
-} from '../../../../components/Contextualbar';
-import {
 	InfoPanel,
 	InfoPanelAction,
 	InfoPanelActionGroup,
@@ -24,9 +18,13 @@ import {
 	InfoPanelSection,
 	InfoPanelText,
 	InfoPanelTitle,
-} from '../../../../components/InfoPanel';
+} from '@rocket.chat/ui-client';
+import { useTranslation } from 'react-i18next';
+
+import { useTeamActions } from './useTeamActions';
 import RetentionPolicyCallout from '../../../../components/InfoPanel/RetentionPolicyCallout';
 import MarkdownText from '../../../../components/MarkdownText';
+import RoomInfoABACSection from '../../../room/contextualBar/Info/RoomInfo/ABAC/RoomInfoABACSection';
 import { useSplitRoomActions } from '../../../room/contextualBar/Info/hooks/useSplitRoomActions';
 import { useRetentionPolicy } from '../../../room/hooks/useRetentionPolicy';
 
@@ -37,7 +35,7 @@ type TeamsInfoProps = {
 	onClickViewChannels: () => void;
 };
 
-const TeamsInfo = ({ room, onClickClose, onClickEdit, onClickViewChannels }: TeamsInfoProps): ReactElement => {
+const TeamsInfo = ({ room, onClickClose, onClickEdit, onClickViewChannels }: TeamsInfoProps) => {
 	const { t } = useTranslation();
 
 	const retentionPolicy = useRetentionPolicy(room);
@@ -135,6 +133,7 @@ const TeamsInfo = ({ room, onClickClose, onClickEdit, onClickViewChannels }: Tea
 						)}
 
 						{retentionPolicy?.isActive && <RetentionPolicyCallout room={room} />}
+						<RoomInfoABACSection room={room} />
 					</InfoPanelSection>
 				</InfoPanel>
 			</ContextualbarScrollableContent>

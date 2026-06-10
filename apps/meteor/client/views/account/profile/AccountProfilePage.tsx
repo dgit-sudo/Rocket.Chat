@@ -1,5 +1,6 @@
 import { ButtonGroup, Button, Box } from '@rocket.chat/fuselage';
 import { SHA256 } from '@rocket.chat/sha256';
+import { Page, PageFooter, PageHeader, PageScrollableContentWithShadow } from '@rocket.chat/ui-client';
 import type { TranslationKey } from '@rocket.chat/ui-contexts';
 import {
 	useSetModal,
@@ -11,7 +12,6 @@ import {
 	useSetting,
 	useLayout,
 } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
 import { useId, useState, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -19,11 +19,10 @@ import AccountProfileForm from './AccountProfileForm';
 import ActionConfirmModal from './ActionConfirmModal';
 import { getProfileInitialValues } from './getProfileInitialValues';
 import ConfirmOwnerChangeModal from '../../../components/ConfirmOwnerChangeModal';
-import { Page, PageFooter, PageHeader, PageScrollableContentWithShadow } from '../../../components/Page';
 import { useAllowPasswordChange } from '../security/useAllowPasswordChange';
 
 // TODO: enforce useMutation
-const AccountProfilePage = (): ReactElement => {
+const AccountProfilePage = () => {
 	const t = useTranslation();
 	const user = useUser();
 	const dispatchToastMessage = useToastMessageDispatch();
@@ -39,7 +38,7 @@ const AccountProfilePage = (): ReactElement => {
 
 	const methods = useForm({
 		defaultValues: getProfileInitialValues(user),
-		mode: 'onBlur',
+		reValidateMode: 'onBlur',
 	});
 
 	const {
@@ -96,11 +95,15 @@ const AccountProfilePage = (): ReactElement => {
 			try {
 				await deleteOwnAccount({ password: SHA256(passwordOrUsername) });
 				dispatchToastMessage({ type: 'success', message: t('User_has_been_deleted') });
-				logout();
+				setModal(null);
 			} catch (error: any) {
 				if (error.error === 'user-last-owner') {
 					const { shouldChangeOwner, shouldBeRemoved } = error.details;
 					return handleConfirmOwnerChange(passwordOrUsername, shouldChangeOwner, shouldBeRemoved);
+				}
+
+				if (error.errorType === 'error-invalid-password') {
+					throw error;
 				}
 
 				dispatchToastMessage({ type: 'error', message: error });
@@ -108,7 +111,7 @@ const AccountProfilePage = (): ReactElement => {
 		};
 
 		return setModal(<ActionConfirmModal onConfirm={handleConfirm} onCancel={() => setModal(null)} isPassword={hasLocalPassword} />);
-	}, [dispatchToastMessage, hasLocalPassword, setModal, handleConfirmOwnerChange, deleteOwnAccount, logout, t]);
+	}, [dispatchToastMessage, hasLocalPassword, setModal, handleConfirmOwnerChange, deleteOwnAccount, t]);
 
 	const profileFormId = useId();
 
@@ -139,14 +142,7 @@ const AccountProfilePage = (): ReactElement => {
 					<Button disabled={!isDirty} onClick={() => reset(getProfileInitialValues(user))}>
 						{t('Cancel')}
 					</Button>
-					<Button
-						form={profileFormId}
-						data-qa='AccountProfilePageSaveButton'
-						primary
-						disabled={!isDirty || loggingOut}
-						loading={isSubmitting}
-						type='submit'
-					>
+					<Button form={profileFormId} primary disabled={!isDirty || loggingOut} loading={isSubmitting} type='submit'>
 						{t('Save_changes')}
 					</Button>
 				</ButtonGroup>

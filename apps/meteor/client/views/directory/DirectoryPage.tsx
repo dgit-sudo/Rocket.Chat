@@ -1,17 +1,16 @@
 import { Tabs } from '@rocket.chat/fuselage';
+import { Page, PageHeader, PageContent } from '@rocket.chat/ui-client';
 import { useRouter, useRouteParameter, useSetting } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
 import { useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Page, PageHeader, PageContent } from '../../components/Page';
 import ChannelsTab from './tabs/channels/ChannelsTab';
 import TeamsTab from './tabs/teams/TeamsTab';
 import UsersTab from './tabs/users/UsersTab';
 
 type TabName = 'users' | 'channels' | 'teams' | 'external';
 
-const DirectoryPage = (): ReactElement => {
+const DirectoryPage = () => {
 	const { t } = useTranslation();
 
 	const defaultTab = useSetting<TabName>('Accounts_Directory_DefaultView', 'users');

@@ -1,16 +1,15 @@
 import type { IRole, IRoom } from '@rocket.chat/core-typings';
 import { Box, Field, FieldLabel, FieldRow, Margins, ButtonGroup, Button, Callout, FieldError } from '@rocket.chat/fuselage';
-import { useEffectEvent } from '@rocket.chat/fuselage-hooks';
+import { useStableCallback } from '@rocket.chat/fuselage-hooks';
+import { usePagination, Page, PageHeader, PageContent } from '@rocket.chat/ui-client';
 import { useToastMessageDispatch, useEndpoint, useRouter } from '@rocket.chat/ui-contexts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useId, useMemo, type ReactElement } from 'react';
+import { useId, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import UsersInRoleTable from './UsersInRoleTable';
 import { useRemoveUserFromRole } from './hooks/useRemoveUserFromRole';
-import { usePagination } from '../../../../components/GenericTable/hooks/usePagination';
-import { Page, PageHeader, PageContent } from '../../../../components/Page';
 import RoomAutoComplete from '../../../../components/RoomAutoComplete';
 import UserAutoCompleteMultiple from '../../../../components/UserAutoCompleteMultiple';
 
@@ -19,7 +18,7 @@ type UsersInRolePayload = {
 	users: string[];
 };
 
-const UsersInRolePage = ({ role }: { role: IRole }): ReactElement => {
+const UsersInRolePage = ({ role }: { role: IRole }) => {
 	const { t } = useTranslation();
 	const dispatchToastMessage = useToastMessageDispatch();
 	const queryClient = useQueryClient();
@@ -39,12 +38,12 @@ const UsersInRolePage = ({ role }: { role: IRole }): ReactElement => {
 	const roomFieldId = useId();
 	const usersFieldId = useId();
 
-	const handleAdd = useEffectEvent(async ({ users, rid }: UsersInRolePayload) => {
+	const handleAdd = useStableCallback(async ({ users, rid }: UsersInRolePayload) => {
 		try {
 			await Promise.all(
 				users.map(async (user) => {
 					if (user) {
-						await addUserToRoleEndpoint({ roleName: _id, username: user, roomId: rid });
+						await addUserToRoleEndpoint({ roleId: _id, username: user, roomId: rid });
 					}
 				}),
 			);

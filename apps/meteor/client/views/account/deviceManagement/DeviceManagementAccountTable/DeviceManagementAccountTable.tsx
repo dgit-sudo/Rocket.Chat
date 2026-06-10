@@ -1,14 +1,11 @@
 import { useMediaQuery } from '@rocket.chat/fuselage-hooks';
+import { GenericTableHeaderCell, usePagination, useSort } from '@rocket.chat/ui-client';
 import { useEndpoint } from '@rocket.chat/ui-contexts';
 import { useQuery } from '@tanstack/react-query';
-import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeviceManagementAccountRow from './DeviceManagementAccountRow';
-import { GenericTableHeaderCell } from '../../../../components/GenericTable';
-import { usePagination } from '../../../../components/GenericTable/hooks/usePagination';
-import { useSort } from '../../../../components/GenericTable/hooks/useSort';
 import DeviceManagementTable from '../../../../components/deviceManagement/DeviceManagementTable';
 import { deviceManagementQueryKeys } from '../../../../lib/queryKeys';
 
@@ -18,7 +15,7 @@ const sortMapping = {
 	loginAt: 'loginAt',
 };
 
-const DeviceManagementAccountTable = (): ReactElement => {
+const DeviceManagementAccountTable = () => {
 	const { t } = useTranslation();
 	const { current, itemsPerPage, setCurrent, setItemsPerPage, ...paginationProps } = usePagination();
 	const { sortBy, sortDirection, setSort } = useSort<'client' | 'os' | 'loginAt'>('loginAt');
@@ -61,7 +58,7 @@ const DeviceManagementAccountTable = (): ReactElement => {
 		<DeviceManagementTable
 			{...queryResult}
 			headers={headers}
-			renderRow={(session): ReactElement => (
+			renderRow={(session) => (
 				<DeviceManagementAccountRow
 					key={session._id}
 					_id={session._id}

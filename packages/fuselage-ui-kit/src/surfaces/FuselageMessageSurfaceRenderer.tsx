@@ -1,5 +1,5 @@
 import * as UiKit from '@rocket.chat/ui-kit';
-import type { ReactElement } from 'react';
+import type { ReactNode } from 'react';
 
 import { FuselageSurfaceRenderer, renderTextObject } from './FuselageSurfaceRenderer';
 import VideoConferenceBlock from '../blocks/VideoConferenceBlock';
@@ -10,11 +10,11 @@ export class FuselageMessageSurfaceRenderer extends FuselageSurfaceRenderer {
 		super(['actions', 'context', 'divider', 'image', 'input', 'section', 'preview', 'video_conf', 'info_card']);
 	}
 
-	plain_text = renderTextObject;
+	override plain_text = renderTextObject;
 
-	mrkdwn = renderTextObject;
+	override mrkdwn = renderTextObject;
 
-	video_conf(block: UiKit.VideoConferenceBlock, context: UiKit.BlockContext, index: number): ReactElement | null {
+	video_conf(block: UiKit.VideoConferenceBlock, context: UiKit.BlockContext, index: number): ReactNode {
 		if (context === UiKit.BlockContext.BLOCK) {
 			return (
 				<AppIdProvider key={index} appId={block.appId}>

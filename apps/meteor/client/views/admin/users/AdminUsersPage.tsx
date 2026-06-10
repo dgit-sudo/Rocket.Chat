@@ -1,11 +1,21 @@
 import type { LicenseInfo } from '@rocket.chat/core-typings';
 import { Callout, ContextualbarIcon, Skeleton, Tabs, TabsItem } from '@rocket.chat/fuselage';
-import { useDebouncedValue, useEffectEvent } from '@rocket.chat/fuselage-hooks';
+import { useDebouncedValue, useStableCallback } from '@rocket.chat/fuselage-hooks';
 import type { OptionProp } from '@rocket.chat/ui-client';
-import { ExternalLink } from '@rocket.chat/ui-client';
+import {
+	ExternalLink,
+	ContextualbarHeader,
+	ContextualbarTitle,
+	ContextualbarClose,
+	ContextualbarDialog,
+	usePagination,
+	useSort,
+	Page,
+	PageHeader,
+	PageContent,
+} from '@rocket.chat/ui-client';
 import { useRouteParameter, useTranslation, useRouter, useEndpoint } from '@rocket.chat/ui-contexts';
 import { useQuery } from '@tanstack/react-query';
-import type { ReactElement } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans } from 'react-i18next';
 
@@ -20,10 +30,6 @@ import UsersTable from './UsersTable';
 import useFilteredUsers from './hooks/useFilteredUsers';
 import usePendingUsersCount from './hooks/usePendingUsersCount';
 import { useSeatsCap } from './useSeatsCap';
-import { ContextualbarHeader, ContextualbarTitle, ContextualbarClose, ContextualbarDialog } from '../../../components/Contextualbar';
-import { usePagination } from '../../../components/GenericTable/hooks/usePagination';
-import { useSort } from '../../../components/GenericTable/hooks/useSort';
-import { Page, PageHeader, PageContent } from '../../../components/Page';
 import { useLicenseLimitsByBehavior } from '../../../hooks/useLicenseLimitsByBehavior';
 import { useShouldPreventAction } from '../../../hooks/useShouldPreventAction';
 import { useCheckoutUrl } from '../subscription/hooks/useCheckoutUrl';
@@ -37,7 +43,7 @@ export type AdminUsersTab = 'all' | 'active' | 'deactivated' | 'pending';
 
 export type UsersTableSortingOption = 'name' | 'username' | 'emails.address' | 'status' | 'active' | 'freeSwitchExtension';
 
-const AdminUsersPage = (): ReactElement => {
+const AdminUsersPage = () => {
 	const t = useTranslation();
 
 	const seatsCap = useSeatsCap();
@@ -90,7 +96,7 @@ const AdminUsersPage = (): ReactElement => {
 		sortData.setSort(tab === 'pending' ? 'active' : 'name', 'asc');
 	};
 
-	const handleCloseContextualbar = useEffectEvent(() => router.navigate('/admin/users'));
+	const handleCloseContextualbar = useStableCallback(() => router.navigate('/admin/users'));
 
 	useEffect(() => {
 		prevSearchTerm.current = searchTerm;

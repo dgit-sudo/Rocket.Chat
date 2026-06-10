@@ -15,7 +15,6 @@ import {
 import { Form, ActionLink } from '@rocket.chat/layout';
 import { CustomFieldsForm, PasswordVerifier, useValidatePassword } from '@rocket.chat/ui-client';
 import { useAccountsCustomFields, useSetting, useToastMessageDispatch } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -33,7 +32,7 @@ type LoginRegisterPayload = {
 	reason: string;
 };
 
-export const RegisterForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRouter }): ReactElement => {
+export const RegisterForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRouter }) => {
 	const { t } = useTranslation();
 
 	const requireNameForRegister = useSetting('Accounts_RequireNameForSignUp', true);
@@ -69,7 +68,7 @@ export const RegisterForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRo
 		clearErrors,
 		control,
 		formState: { errors },
-	} = useForm<LoginRegisterPayload>({ mode: 'onBlur' });
+	} = useForm<LoginRegisterPayload>();
 
 	const { password } = watch();
 	const passwordIsValid = useValidatePassword(password);
@@ -93,11 +92,14 @@ export const RegisterForm = ({ setLoginRoute }: { setLoginRoute: DispatchLoginRo
 					if (error.errorType === 'error-user-already-exists') {
 						setError('username', { type: 'user-already-exists', message: t('registration.component.form.usernameAlreadyExists') });
 					}
+					if (error.errorType === 'error-invalid-domain') {
+						setError('email', { type: 'invalid-domain', message: t('registration.component.form.invalidEmailDomain') });
+					}
 					if (/Email already exists/.test(error.error)) {
-						setError('email', { type: 'email-already-exists', message: t('registration.component.form.emailAlreadyExists') });
+						setError('email', { type: 'email-already-exists', message: t('registration.component.form.emailAlreadyInUse') });
 					}
 					if (/Username is already in use/.test(error.error)) {
-						setError('username', { type: 'username-already-exists', message: t('registration.component.form.userAlreadyExist') });
+						setError('username', { type: 'username-already-exists', message: t('registration.component.form.usernameAlreadyInUse') });
 					}
 					if (/The username provided is not valid/.test(error.error)) {
 						setError('username', {

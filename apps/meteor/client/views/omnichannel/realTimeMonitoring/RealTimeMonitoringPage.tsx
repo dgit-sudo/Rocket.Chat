@@ -1,12 +1,12 @@
 import type { SelectOption } from '@rocket.chat/fuselage';
 import { Box, Select, Margins, Option } from '@rocket.chat/fuselage';
-import { useEffectEvent } from '@rocket.chat/fuselage-hooks';
+import { useStableCallback } from '@rocket.chat/fuselage-hooks';
+import { Page, PageHeader, PageScrollableContentWithShadow } from '@rocket.chat/ui-client';
 import { useQueryClient } from '@tanstack/react-query';
 import type { Key } from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Page, PageHeader, PageScrollableContentWithShadow } from '../../../components/Page';
 import { getDateRange } from '../../../lib/utils/getDateRange';
 import AutoCompleteDepartment from '../components/AutoCompleteDepartment';
 import Label from '../components/Label';
@@ -32,7 +32,7 @@ const RealTimeMonitoringPage = () => {
 
 	const queryClient = useQueryClient();
 
-	const reloadCharts = useEffectEvent(() => {
+	const reloadCharts = useStableCallback(() => {
 		queryClient.invalidateQueries({ queryKey: omnichannelQueryKeys.analytics.all(departmentId) });
 	});
 
@@ -76,7 +76,7 @@ const RealTimeMonitoringPage = () => {
 							<Label mb={4}>{t('Update_every')}</Label>
 							<Select
 								options={reloadOptions}
-								onChange={useEffectEvent((val: Key) => setReloadFrequency(val as number))}
+								onChange={useStableCallback((val: Key) => setReloadFrequency(val as number))}
 								value={reloadFrequency}
 							/>
 						</Box>

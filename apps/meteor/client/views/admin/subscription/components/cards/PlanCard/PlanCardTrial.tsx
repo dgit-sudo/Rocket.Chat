@@ -1,12 +1,10 @@
 import type { ILicenseV3 } from '@rocket.chat/core-typings';
 import { Box, Card, CardBody, CardControls, CardRow, Tag } from '@rocket.chat/fuselage';
-import { ExternalLink } from '@rocket.chat/ui-client';
+import { ExternalLink, useLicenseName } from '@rocket.chat/ui-client';
 import { differenceInDays } from 'date-fns';
-import type { ReactElement } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import PlanCardHeader from './PlanCardHeader';
-import { useLicenseName } from '../../../../../../hooks/useLicense';
 import { DOWNGRADE_LINK, TRIAL_LINK } from '../../../utils/links';
 import UpgradeButton from '../../UpgradeButton';
 
@@ -14,7 +12,7 @@ type PlanCardProps = {
 	licenseInformation: ILicenseV3['information'];
 };
 
-const PlanCardTrial = ({ licenseInformation }: PlanCardProps): ReactElement => {
+const PlanCardTrial = ({ licenseInformation }: PlanCardProps) => {
 	const { t } = useTranslation();
 
 	const planName = useLicenseName();

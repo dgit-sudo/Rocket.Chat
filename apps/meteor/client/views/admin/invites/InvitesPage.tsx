@@ -1,23 +1,24 @@
 import { States, StatesIcon, StatesTitle, StatesActions, StatesAction } from '@rocket.chat/fuselage';
 import { useMediaQuery } from '@rocket.chat/fuselage-hooks';
-import { GenericModal } from '@rocket.chat/ui-client';
-import { useSetModal, useToastMessageDispatch, useTranslation, useEndpoint } from '@rocket.chat/ui-contexts';
-import { useQuery } from '@tanstack/react-query';
-import type { ReactElement } from 'react';
-import { useMemo } from 'react';
-
-import InviteRow from './InviteRow';
-import GenericNoResults from '../../../components/GenericNoResults';
 import {
+	GenericModal,
 	GenericTable,
 	GenericTableBody,
 	GenericTableHeader,
 	GenericTableHeaderCell,
 	GenericTableLoadingTable,
-} from '../../../components/GenericTable';
-import { Page, PageHeader, PageContent } from '../../../components/Page';
+	Page,
+	PageHeader,
+	PageContent,
+} from '@rocket.chat/ui-client';
+import { useSetModal, useToastMessageDispatch, useTranslation, useEndpoint } from '@rocket.chat/ui-contexts';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
-const InvitesPage = (): ReactElement => {
+import InviteRow from './InviteRow';
+import GenericNoResults from '../../../components/GenericNoResults';
+
+const InvitesPage = () => {
 	const t = useTranslation();
 	const dispatchToastMessage = useToastMessageDispatch();
 	const setModal = useSetModal();
@@ -53,14 +54,15 @@ const InvitesPage = (): ReactElement => {
 		setModal(
 			<GenericModal
 				title={t('Are_you_sure')}
-				children={t('Are_you_sure_you_want_to_delete_this_record')}
 				variant='danger'
 				confirmText={t('Yes')}
 				cancelText={t('No')}
 				onClose={(): void => setModal()}
 				onCancel={(): void => setModal()}
 				onConfirm={confirmRemove}
-			/>,
+			>
+				{t('Are_you_sure_you_want_to_delete_this_record')}
+			</GenericModal>,
 		);
 	};
 
@@ -108,7 +110,7 @@ const InvitesPage = (): ReactElement => {
 							</GenericTableBody>
 						</GenericTable>
 					)}
-					{isSuccess && data && data.length === 0 && <GenericNoResults />}
+					{isSuccess && data?.length === 0 && <GenericNoResults />}
 					{isError && (
 						<States>
 							<StatesIcon name='warning' variation='danger' />

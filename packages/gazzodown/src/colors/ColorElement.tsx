@@ -1,4 +1,4 @@
-import { memo, ReactElement } from 'react';
+import { memo } from 'react';
 
 type ColorElementProps = {
 	r: number;
@@ -7,7 +7,7 @@ type ColorElementProps = {
 	a: number;
 };
 
-const ColorElement = ({ r, g, b, a }: ColorElementProps): ReactElement => (
+const ColorElement = ({ r, g, b, a }: ColorElementProps) => (
 	<span>
 		<span
 			style={{

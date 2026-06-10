@@ -1,5 +1,5 @@
 import { Button, Chip, FieldRow, TextInput } from '@rocket.chat/fuselage';
-import type { ComponentProps, FormEvent } from 'react';
+import type { ComponentProps, ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -30,25 +30,18 @@ const DepartmentTags = ({ error, value: tags, onChange, ...props }: DepartmentTa
 		<>
 			<FieldRow>
 				<TextInput
-					data-qa='DepartmentEditTextInput-ConversationClosingTags'
 					error={error}
 					placeholder={t('Enter_a_tag')}
 					value={tagText}
-					onChange={(e: FormEvent<HTMLInputElement>) => setTagText(e.currentTarget.value)}
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setTagText(e.currentTarget.value)}
 					{...props}
 				/>
-				<Button
-					disabled={Boolean(!tagText.trim()) || tags.includes(tagText)}
-					data-qa='DepartmentEditAddButton-ConversationClosingTags'
-					mis={8}
-					title={t('Add')}
-					onClick={handleAddTag}
-				>
+				<Button disabled={Boolean(!tagText.trim()) || tags.includes(tagText)} mis={8} title={t('Add')} onClick={handleAddTag}>
 					{t('Add')}
 				</Button>
 			</FieldRow>
 			{tags?.length > 0 && (
-				<FieldRow>
+				<FieldRow justifyContent='flex-start'>
 					{tags.map((tag, i) => (
 						<Chip key={i} onClick={handleTagChipClick(tag)} mie={8}>
 							{tag}

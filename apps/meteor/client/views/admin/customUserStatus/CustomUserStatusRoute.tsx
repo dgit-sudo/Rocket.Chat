@@ -1,18 +1,24 @@
 import { Button, ButtonGroup } from '@rocket.chat/fuselage';
+import {
+	ContextualbarHeader,
+	ContextualbarClose,
+	ContextualbarTitle,
+	ContextualbarDialog,
+	Page,
+	PageHeader,
+	PageContent,
+} from '@rocket.chat/ui-client';
 import { useRoute, useRouteParameter, usePermission, useTranslation, useSetting } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
 import { useCallback, useRef, useEffect } from 'react';
 
 import CustomUserActiveConnections from './CustomUserActiveConnections';
 import CustomUserStatusFormWithData from './CustomUserStatusFormWithData';
 import CustomUserStatusService from './CustomUserStatusService';
 import CustomUserStatusTable from './CustomUserStatusTable';
-import { ContextualbarHeader, ContextualbarClose, ContextualbarTitle, ContextualbarDialog } from '../../../components/Contextualbar';
-import { Page, PageHeader, PageContent } from '../../../components/Page';
 import { useIsEnterprise } from '../../../hooks/useIsEnterprise';
 import NotAuthorizedPage from '../../notAuthorized/NotAuthorizedPage';
 
-const CustomUserStatusRoute = (): ReactElement => {
+const CustomUserStatusRoute = () => {
 	const t = useTranslation();
 	const route = useRoute('user-status');
 	const context = useRouteParameter('context');

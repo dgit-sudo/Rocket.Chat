@@ -1,9 +1,4 @@
 import { Field, FieldLabel, FieldRow, ButtonGroup, Button, CheckBox, Callout } from '@rocket.chat/fuselage';
-import { useId, type ReactElement } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-
-import PruneMessagesDateTimeRow from './PruneMessagesDateTimeRow';
 import {
 	ContextualbarHeader,
 	ContextualbarIcon,
@@ -12,7 +7,12 @@ import {
 	ContextualbarFooter,
 	ContextualbarClose,
 	ContextualbarDialog,
-} from '../../../../components/Contextualbar';
+} from '@rocket.chat/ui-client';
+import { useId } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import PruneMessagesDateTimeRow from './PruneMessagesDateTimeRow';
 import UserAutoCompleteMultiple from '../../../../components/UserAutoCompleteMultiple';
 
 type PruneMessagesProps = {
@@ -23,7 +23,7 @@ type PruneMessagesProps = {
 	onClickPrune: () => void;
 };
 
-const PruneMessages = ({ callOutText, validateText, onClickClose, onClickPrune }: PruneMessagesProps): ReactElement => {
+const PruneMessages = ({ callOutText, validateText, onClickClose, onClickPrune }: PruneMessagesProps) => {
 	const { t } = useTranslation();
 	const { control } = useFormContext();
 

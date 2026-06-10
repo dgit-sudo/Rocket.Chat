@@ -1,7 +1,7 @@
 import { MessageEmoji, ThreadMessageEmoji } from '@rocket.chat/fuselage';
 import type * as MessageParser from '@rocket.chat/message-parser';
 import DOMPurify from 'dompurify';
-import { ReactElement, useMemo, useContext, memo } from 'react';
+import { useMemo, useContext, memo } from 'react';
 
 import { MarkupInteractionContext } from '../MarkupInteractionContext';
 
@@ -10,7 +10,7 @@ type EmojiProps = MessageParser.Emoji & {
 	preview?: boolean;
 };
 
-const EmojiRenderer = ({ big = false, preview = false, ...emoji }: EmojiProps): ReactElement => {
+const EmojiRenderer = ({ big = false, preview = false, ...emoji }: EmojiProps) => {
 	const { detectEmoji } = useContext(MarkupInteractionContext);
 
 	const fallback = useMemo(() => ('unicode' in emoji ? emoji.unicode : `:${emoji.shortCode ?? emoji.value.value}:`), [emoji]);

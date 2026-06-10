@@ -1,7 +1,6 @@
 import type { OptionType } from '@rocket.chat/fuselage';
 import { IconButton, PositionAnimated, Options, useCursor } from '@rocket.chat/fuselage';
 import type * as UiKit from '@rocket.chat/ui-kit';
-import type { ReactElement } from 'react';
 import { useRef, useCallback, useMemo } from 'react';
 
 import { useStringFromTextObject } from '../hooks/useStringFromTextObject';
@@ -10,7 +9,7 @@ import type { BlockProps } from '../utils/BlockProps';
 
 type OverflowElementProps = BlockProps<UiKit.OverflowElement>;
 
-const OverflowElement = ({ block, context }: OverflowElementProps): ReactElement => {
+const OverflowElement = ({ block, context }: OverflowElementProps) => {
 	const [{ loading }, action] = useUiKitState(block, context);
 	const fromTextObjectToString = useStringFromTextObject();
 
@@ -22,7 +21,7 @@ const OverflowElement = ({ block, context }: OverflowElementProps): ReactElement
 	);
 
 	const [cursor, handleKeyDown, handleKeyUp, reset, [visible, hide, show]] = useCursor(-1, options, (selectedOption, [, hide]) => {
-		fireChange([selectedOption[0] as string, selectedOption[1] as string]);
+		void fireChange([selectedOption[0] as string, selectedOption[1] as string]);
 		reset();
 		hide();
 	});
@@ -38,7 +37,7 @@ const OverflowElement = ({ block, context }: OverflowElementProps): ReactElement
 			if (url) {
 				window.open(url);
 			}
-			action({ target: { value: String(value) } });
+			void action({ target: { value: String(value) } });
 			reset();
 			hide();
 		},

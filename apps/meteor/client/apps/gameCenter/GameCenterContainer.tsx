@@ -1,8 +1,4 @@
 import { Avatar } from '@rocket.chat/fuselage';
-import type { ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import type { IGame } from './GameCenter';
 import {
 	ContextualbarTitle,
 	ContextualbarHeader,
@@ -10,7 +6,10 @@ import {
 	ContextualbarContent,
 	ContextualbarClose,
 	ContextualbarDialog,
-} from '../../components/Contextualbar';
+} from '@rocket.chat/ui-client';
+import { useTranslation } from 'react-i18next';
+
+import type { IGame } from './GameCenter';
 
 interface IGameCenterContainerProps {
 	handleClose: () => void;
@@ -18,7 +17,7 @@ interface IGameCenterContainerProps {
 	game: IGame;
 }
 
-const GameCenterContainer = ({ handleClose, handleBack, game }: IGameCenterContainerProps): ReactElement => {
+const GameCenterContainer = ({ handleClose, handleBack, game }: IGameCenterContainerProps) => {
 	const { t } = useTranslation();
 
 	return (

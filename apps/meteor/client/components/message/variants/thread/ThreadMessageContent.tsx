@@ -3,7 +3,6 @@ import { isE2EEMessage, isQuoteAttachment } from '@rocket.chat/core-typings';
 import { MessageBody } from '@rocket.chat/fuselage';
 import type { TranslationKey } from '@rocket.chat/ui-contexts';
 import { useUserId, useUserPresence } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,7 +24,7 @@ type ThreadMessageContentProps = {
 	message: IThreadMessage | IThreadMainMessage;
 };
 
-const ThreadMessageContent = ({ message }: ThreadMessageContentProps): ReactElement => {
+const ThreadMessageContent = ({ message }: ThreadMessageContentProps) => {
 	const encrypted = isE2EEMessage(message);
 	const { enabled: oembedEnabled } = useOembedLayout();
 	const subscription = useSubscriptionFromMessageQuery(message).data ?? undefined;
@@ -46,7 +45,11 @@ const ThreadMessageContent = ({ message }: ThreadMessageContentProps): ReactElem
 
 	return (
 		<>
-			{isMessageEncrypted && <MessageBody data-qa-type='message-body'>{t('E2E_message_encrypted_placeholder')}</MessageBody>}
+			{isMessageEncrypted && (
+				<MessageBody role='document' aria-roledescription={t('message_body')}>
+					{t('E2E_message_encrypted_placeholder')}
+				</MessageBody>
+			)}
 
 			{!!quotes?.length && <Attachments attachments={quotes} />}
 

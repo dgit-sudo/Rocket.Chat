@@ -73,7 +73,7 @@ export const processSlashCommand = async (chat: ChatAPI, message: IMessage): Pro
 		return true;
 	}
 
-	await sdk.rest.post('/v1/statistics.telemetry', {
+	void sdk.rest.post('/v1/statistics.telemetry', {
 		params: [{ eventName: 'slashCommandsStats', timestamp: Date.now(), command: commandName }],
 	});
 
@@ -91,7 +91,14 @@ export const processSlashCommand = async (chat: ChatAPI, message: IMessage): Pro
 			chat.ActionManager.notifyBusy();
 		}
 
-		const result = await sdk.call('slashCommand', { cmd: commandName, params, msg: message, triggerId });
+		chat.composer?.clear();
+		const { result } = await sdk.rest.post('/v1/commands.run', {
+			command: commandName,
+			params,
+			roomId: message.rid,
+			...(message.tmid && { tmid: message.tmid }),
+			...(triggerId && { triggerId }),
+		});
 
 		handleResult?.(undefined, result, data);
 	} catch (error: unknown) {

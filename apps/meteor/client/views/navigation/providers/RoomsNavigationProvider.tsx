@@ -1,14 +1,6 @@
-import {
-	isDirectMessageRoom,
-	isDiscussion,
-	isLivechatInquiryRecord,
-	isOmnichannelRoom,
-	isPrivateRoom,
-	isPublicRoom,
-	isTeamRoom,
-} from '@rocket.chat/core-typings';
+import { isDirectMessageRoom, isDiscussion, isOmnichannelRoom, isPrivateRoom, isPublicRoom, isTeamRoom } from '@rocket.chat/core-typings';
 import type { ILivechatInquiryRecord, IRoom } from '@rocket.chat/core-typings';
-import { useDebouncedValue, useEffectEvent } from '@rocket.chat/fuselage-hooks';
+import { useDebouncedValue, useStableCallback } from '@rocket.chat/fuselage-hooks';
 import type { SubscriptionWithRoom, TranslationKey } from '@rocket.chat/ui-contexts';
 import { useSetting, useUserPreference, useUserSubscriptions, useLayout } from '@rocket.chat/ui-contexts';
 import type { ReactNode } from 'react';
@@ -19,7 +11,12 @@ import { RoomManager } from '../../../lib/RoomManager';
 import { Rooms } from '../../../stores';
 import { useOmnichannelEnabled } from '../../omnichannel/hooks/useOmnichannelEnabled';
 import { useQueuedInquiries } from '../../omnichannel/hooks/useQueuedInquiries';
-import type { GroupedUnreadInfoData, AllGroupsKeys, AllGroupsKeysWithUnread } from '../contexts/RoomsNavigationContext';
+import type {
+	GroupedUnreadInfoData,
+	AllGroupsKeys,
+	AllGroupsKeysWithUnread,
+	RoomsNavigationGroup,
+} from '../contexts/RoomsNavigationContext';
 import {
 	RoomsNavigationContext,
 	getEmptyUnreadInfo,
@@ -42,14 +39,7 @@ export type useRoomsGroupsReturnType = {
 	};
 };
 
-const updateGroupUnreadInfo = (
-	room: SubscriptionWithRoom | ILivechatInquiryRecord,
-	current: GroupedUnreadInfoData,
-): GroupedUnreadInfoData => {
-	if (isLivechatInquiryRecord(room)) {
-		return getEmptyUnreadInfo();
-	}
-
+const updateGroupUnreadInfo = (room: SubscriptionWithRoom, current: GroupedUnreadInfoData): GroupedUnreadInfoData => {
 	return {
 		...current,
 		userMentions: current.userMentions + (room.userMentions || 0),
@@ -63,10 +53,9 @@ const updateGroupUnreadInfo = (
 const hasMention = (room: SubscriptionWithRoom) =>
 	room.userMentions || room.groupMentions || room.tunreadUser?.length || room.tunreadGroup?.length;
 
-type GroupMap = Map<AllGroupsKeysWithUnread, Set<SubscriptionWithRoom | ILivechatInquiryRecord>>;
 type UnreadGroupDataMap = Map<AllGroupsKeys, GroupedUnreadInfoData>;
 
-const useRoomsGroups = (): [GroupMap, UnreadGroupDataMap] => {
+const useRoomsGroups = (): [RoomsNavigationGroup, UnreadGroupDataMap] => {
 	const showOmnichannel = useOmnichannelEnabled();
 	const sidebarShowUnread = useUserPreference('sidebarShowUnread');
 	const sidebarGroupByType = useUserPreference('sidebarGroupByType');
@@ -80,14 +69,14 @@ const useRoomsGroups = (): [GroupMap, UnreadGroupDataMap] => {
 
 	return useDebouncedValue(
 		useMemo(() => {
-			const groups: GroupMap = new Map();
+			const groups: RoomsNavigationGroup = new Map();
 			showOmnichannel && groups.set('queue', new Set(queue));
 
 			const unreadGroupData: UnreadGroupDataMap = new Map();
 
-			const setGroupRoom = (key: AllGroupsKeys, room: SubscriptionWithRoom | ILivechatInquiryRecord) => {
+			const setGroupRoom = (key: AllGroupsKeys, room: SubscriptionWithRoom) => {
 				const getGroupSet = (key: AllGroupsKeysWithUnread) => {
-					const roomSet = groups.get(key) || new Set<SubscriptionWithRoom | ILivechatInquiryRecord>();
+					const roomSet = groups.get(key) || new Set<SubscriptionWithRoom>();
 					if (!groups.has(key)) {
 						groups.set(key, roomSet);
 					}
@@ -170,7 +159,7 @@ const RoomsNavigationContextProvider = ({ children }: { children: ReactNode }) =
 
 	const [currentFilter, unread, , setCurrentFilter] = useSidePanelFilter();
 
-	const setFilter = useEffectEvent((filter: AllGroupsKeys, unread: boolean, parentRid?: IRoom['_id']) => {
+	const setFilter = useStableCallback((filter: AllGroupsKeys, unread: boolean, parentRid?: IRoom['_id']) => {
 		openSidePanel();
 		setCurrentFilter(getFilterKey(filter, unread));
 		setParentRoom(filter, parentRid);
@@ -178,7 +167,7 @@ const RoomsNavigationContextProvider = ({ children }: { children: ReactNode }) =
 
 	const [groups, unreadGroupData] = useRoomsGroups();
 
-	const handleRoomOpened = useEffectEvent((rid: string) => {
+	const handleRoomOpened = useStableCallback((rid: string) => {
 		const room = Rooms.use.getState().find((r) => r._id === rid);
 
 		if (!room) {

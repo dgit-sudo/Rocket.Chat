@@ -1,11 +1,23 @@
-import { Box, CheckBox, Icon, Option, SearchInput, Tile } from '@rocket.chat/fuselage';
+import { Box, CheckBox, Icon, Option, OptionIcon, SearchInput, Tile } from '@rocket.chat/fuselage';
 import type { TranslationKey } from '@rocket.chat/ui-contexts';
-import type { FormEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import { Fragment, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { type OptionProp } from './MultiSelectCustom';
+import type { OptionProp } from './MultiSelectCustom';
 import { useFilteredOptions } from './useFilteredOptions';
+
+const getIconColor = (color: 'default' | 'danger' | 'warning' | undefined) => {
+	switch (color) {
+		case 'danger':
+			return 'status-font-on-danger';
+		case 'warning':
+			return 'status-font-on-warning';
+		case 'default':
+		default:
+			return undefined;
+	}
+};
 
 const MultiSelectCustomList = ({
 	options,
@@ -13,14 +25,14 @@ const MultiSelectCustomList = ({
 	searchBarText,
 }: {
 	options: OptionProp[];
-	onSelected: (item: OptionProp, e?: FormEvent<HTMLElement>) => void;
+	onSelected: (item: OptionProp, e?: ChangeEvent<HTMLElement>) => void;
 	searchBarText?: string;
 }) => {
 	const { t } = useTranslation();
 
 	const [text, setText] = useState('');
 
-	const handleChange = useCallback((event: FormEvent<HTMLInputElement>) => setText(event.currentTarget.value), []);
+	const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => setText(event.currentTarget.value), []);
 
 	const filteredOptions = useFilteredOptions(text, options);
 
@@ -46,6 +58,7 @@ const MultiSelectCustomList = ({
 						</Box>
 					) : (
 						<Option key={option.id}>
+							{option.icon && <OptionIcon name={option.icon.name} color={getIconColor(option.icon.color)} mie={4} />}
 							<Box w='full' display='flex' justifyContent='space-between' is='label'>
 								{t(option.text as TranslationKey)}
 

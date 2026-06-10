@@ -1,8 +1,8 @@
 import { isSetting, isSettingColor } from '@rocket.chat/core-typings';
 import { AccordionItem, Box, Button, FieldGroup } from '@rocket.chat/fuselage';
-import { useEffectEvent } from '@rocket.chat/fuselage-hooks';
+import { useStableCallback } from '@rocket.chat/fuselage-hooks';
 import type { TranslationKey } from '@rocket.chat/ui-contexts';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,7 +19,7 @@ type SettingsSectionProps = {
 	children?: ReactNode;
 };
 
-function SettingsSection({ groupId, hasReset = true, sectionName, currentTab, solo, help, children }: SettingsSectionProps): ReactElement {
+function SettingsSection({ groupId, hasReset = true, sectionName, currentTab, solo, help, children }: SettingsSectionProps) {
 	const { t } = useTranslation();
 
 	const editableSettings = useEditableSettings(
@@ -42,7 +42,7 @@ function SettingsSection({ groupId, hasReset = true, sectionName, currentTab, so
 
 	const dispatch = useEditableSettingsDispatch();
 
-	const reset = useEffectEvent(() => {
+	const reset = useStableCallback(() => {
 		dispatch(
 			editableSettings
 				.filter(({ disabled }) => !disabled)
@@ -89,14 +89,9 @@ function SettingsSection({ groupId, hasReset = true, sectionName, currentTab, so
 				{children}
 			</FieldGroup>
 			{hasReset && canReset && (
-				<Button
-					children={t('Reset_section_settings')}
-					secondary
-					danger
-					marginBlockStart={16}
-					data-section={sectionName}
-					onClick={handleResetSectionClick}
-				/>
+				<Button secondary danger marginBlockStart={16} data-section={sectionName} onClick={handleResetSectionClick}>
+					{t('Reset_section_settings')}
+				</Button>
 			)}
 		</AccordionItem>
 	);

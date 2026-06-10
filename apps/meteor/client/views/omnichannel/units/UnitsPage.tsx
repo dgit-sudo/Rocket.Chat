@@ -1,12 +1,11 @@
 import { Button, ButtonGroup } from '@rocket.chat/fuselage';
-import { useEffectEvent } from '@rocket.chat/fuselage-hooks';
+import { useStableCallback } from '@rocket.chat/fuselage-hooks';
+import { ContextualbarDialog, Page, PageHeader, PageContent } from '@rocket.chat/ui-client';
 import { useTranslation, useRouteParameter, useRouter } from '@rocket.chat/ui-contexts';
 
 import UnitEdit from './UnitEdit';
 import UnitEditWithData from './UnitEditWithData';
 import UnitsTable from './UnitsTable';
-import { ContextualbarDialog } from '../../../components/Contextualbar';
-import { Page, PageHeader, PageContent } from '../../../components/Page';
 
 const UnitsPage = () => {
 	const t = useTranslation();
@@ -15,7 +14,7 @@ const UnitsPage = () => {
 	const context = useRouteParameter('context');
 	const id = useRouteParameter('id');
 
-	const handleCloseContextualbar = useEffectEvent(() => router.navigate('/omnichannel/units'));
+	const handleCloseContextualbar = useStableCallback(() => router.navigate('/omnichannel/units'));
 
 	return (
 		<Page flexDirection='row'>

@@ -1,13 +1,12 @@
 import type { RoomType } from '@rocket.chat/core-typings';
 import { Box, States, StatesIcon, StatesSubtitle, StatesTitle } from '@rocket.chat/fuselage';
-import type { ReactElement } from 'react';
+import { Header } from '@rocket.chat/ui-client';
 import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import NotSubscribedRoom from './NotSubscribedRoom';
 import RoomSkeleton from './RoomSkeleton';
 import { useOpenRoom } from './hooks/useOpenRoom';
-import { Header } from '../../components/Header';
 import { getErrorMessage } from '../../lib/errorHandling';
 import { NotAuthorizedError } from '../../lib/errors/NotAuthorizedError';
 import { NotSubscribedToRoomError } from '../../lib/errors/NotSubscribedToRoomError';
@@ -25,7 +24,7 @@ type RoomOpenerProps = {
 	reference: string;
 };
 
-const RoomOpener = ({ type, reference }: RoomOpenerProps): ReactElement => {
+const RoomOpener = ({ type, reference }: RoomOpenerProps) => {
 	const { data, error, isSuccess, isError, isLoading } = useOpenRoom({ type, reference });
 	const { t } = useTranslation();
 

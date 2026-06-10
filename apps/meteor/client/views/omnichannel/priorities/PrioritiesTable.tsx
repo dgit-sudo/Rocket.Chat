@@ -1,16 +1,15 @@
 import type { ILivechatPriority, Serialized } from '@rocket.chat/core-typings';
-import type { ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import PrioritiesTableRow from './PrioritiesTableRow';
-import GenericNoResults from '../../../components/GenericNoResults';
 import {
 	GenericTable,
 	GenericTableHeaderCell,
 	GenericTableHeader,
 	GenericTableBody,
 	GenericTableLoadingTable,
-} from '../../../components/GenericTable';
+} from '@rocket.chat/ui-client';
+import { useTranslation } from 'react-i18next';
+
+import PrioritiesTableRow from './PrioritiesTableRow';
+import GenericNoResults from '../../../components/GenericNoResults';
 
 type PrioritiesTableProps = {
 	priorities?: Serialized<ILivechatPriority>[];
@@ -18,7 +17,7 @@ type PrioritiesTableProps = {
 	isLoading: boolean;
 };
 
-export const PrioritiesTable = ({ priorities, onRowClick, isLoading }: PrioritiesTableProps): ReactElement => {
+export const PrioritiesTable = ({ priorities, onRowClick, isLoading }: PrioritiesTableProps) => {
 	const { t } = useTranslation();
 
 	const headers = (
@@ -42,7 +41,7 @@ export const PrioritiesTable = ({ priorities, onRowClick, isLoading }: Prioritie
 			)}
 			{priorities?.length === 0 && <GenericNoResults />}
 			{priorities && priorities?.length > 0 && (
-				<GenericTable>
+				<GenericTable aria-label={t('Priorities')}>
 					<GenericTableHeader>{headers}</GenericTableHeader>
 					<GenericTableBody>
 						{priorities?.map(({ _id, name, i18n, sortItem, dirty }) => (

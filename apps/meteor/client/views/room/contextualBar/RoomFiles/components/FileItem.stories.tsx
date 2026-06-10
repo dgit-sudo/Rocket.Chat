@@ -1,7 +1,7 @@
+import { Contextualbar } from '@rocket.chat/ui-client';
 import type { Meta, StoryFn } from '@storybook/react';
 
 import FileItem from './FileItem';
-import { Contextualbar } from '../../../../../components/Contextualbar';
 
 export default {
 	component: FileItem,
@@ -23,5 +23,6 @@ Default.args = {
 			_id: 'rocket.cat',
 			username: 'rocket.cat',
 		},
+		_updatedAt: new Date(),
 	},
 };

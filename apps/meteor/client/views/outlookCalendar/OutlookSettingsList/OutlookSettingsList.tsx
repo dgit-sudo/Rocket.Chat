@@ -1,9 +1,4 @@
 import { ButtonGroup, Button } from '@rocket.chat/fuselage';
-import { useTranslation, useUserPreference, useEndpoint, useToastMessageDispatch } from '@rocket.chat/ui-contexts';
-import type { ReactElement } from 'react';
-import { useCallback } from 'react';
-
-import OutlookSettingItem from './OutlookSettingItem';
 import {
 	ContextualbarHeader,
 	ContextualbarIcon,
@@ -12,7 +7,11 @@ import {
 	ContextualbarContent,
 	ContextualbarFooter,
 	ContextualbarDialog,
-} from '../../../components/Contextualbar';
+} from '@rocket.chat/ui-client';
+import { useTranslation, useUserPreference, useEndpoint, useToastMessageDispatch } from '@rocket.chat/ui-contexts';
+import { useCallback } from 'react';
+
+import OutlookSettingItem from './OutlookSettingItem';
 import { useOutlookAuthentication, useOutlookAuthenticationMutationLogout } from '../hooks/useOutlookAuthentication';
 
 type OutlookSettingsListProps = {
@@ -20,7 +19,7 @@ type OutlookSettingsListProps = {
 	changeRoute: () => void;
 };
 
-const OutlookSettingsList = ({ onClose, changeRoute }: OutlookSettingsListProps): ReactElement => {
+const OutlookSettingsList = ({ onClose, changeRoute }: OutlookSettingsListProps) => {
 	const t = useTranslation();
 	const dispatchToastMessage = useToastMessageDispatch();
 	const saveUserPreferences = useEndpoint('POST', '/v1/users.setPreferences');
